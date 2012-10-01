@@ -1,5 +1,7 @@
 #include <iostream>
 
+#include "conio.h"
+
 using std::ostream;
 
 const int n = 40;
@@ -33,19 +35,20 @@ private:
 };
 
 class MashinTuring {
+friend MashinTuring* creatAlgo( const char* );
+friend MashinTuring* loadAlgo( const char* );
+friend void saveAlgo( MashinTuring*, const char* );
+friend MashinTuring* editAlgo( MashinTuring* );
+friend void runAlgo( MashinTuring*, const char* );
 public:
 	MashinTuring();
 	Pravila getPravilo( int, int );
 	void setPravilo( int, int, int, int, int );
 	void printPravilo( int, int );
 	void printStatusAlgo();
-	void editAlgo();
-	void loadPravila();
-	void runAlgo();
 	int stepGo( int, int );
 	int searchStop( int );
-private:
 	Lenta tLenta;
+private:
 	Pravila pravilo[ 15 ][ 2 ];
 };
-

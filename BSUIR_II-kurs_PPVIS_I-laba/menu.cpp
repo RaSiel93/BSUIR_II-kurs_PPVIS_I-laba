@@ -2,6 +2,7 @@
 #include <conio.h>
 #include <windows.h>
 
+#include "mashina.h";
 #include "menu.h"
 
 using std::cout;
@@ -58,4 +59,21 @@ char* textSearch( char* string, int &posString ) {
 	posString++;
 	textPoint[ j ] = '\0';
 	return textPoint;
+}
+
+void testcaseMenu( char* path ) {
+	int change = -1;
+	MashinTuring *TMashin = 0;
+	while( change != 0 ) {
+		system( "CLS" );
+		change = menu( 6, "Создать алгоритм;Загрузить алгоритм;Сохранить алгоритм;Редактировать алгоритм;Запустить;Выйти");
+		switch( change ) {
+		case 1: TMashin = creatAlgo( path ); break;
+		case 2: TMashin = loadAlgo( path ); break;
+		case 3: saveAlgo( TMashin, path ); break;
+		case 4: TMashin = editAlgo( TMashin ); break;
+		case 5: runAlgo( TMashin, path ); break;
+		default: change = 0;
+		}
+	}
 }
