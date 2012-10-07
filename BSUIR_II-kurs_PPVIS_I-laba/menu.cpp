@@ -41,7 +41,6 @@ void change ( int &m, int count, char* textSelected ) {
 		else
 			cout << "    ";
 		char temp[ 30 ];
-		int size = 0;
 		CharToOem( textSearch( textSelected, pos ), temp );
 		cout << i + 1 << ". " << temp << endl;
 	}
@@ -64,15 +63,15 @@ char* textSearch( char* string, int &posString ) {
 void testcaseMenu( char* path ) {
 	int change = -1;
 	MashinTuring *TMashin = 0;
-	while( change != 0 ) {
-		system( "CLS" );
+	while( change ) {
+		system( "CLS" );	
 		change = menu( 6, "Создать алгоритм;Загрузить алгоритм;Сохранить алгоритм;Редактировать алгоритм;Запустить;Выйти");
 		switch( change ) {
 		case 1: TMashin = creatAlgo( path ); break;
 		case 2: TMashin = loadAlgo( path ); break;
 		case 3: saveAlgo( TMashin, path ); break;
 		case 4: TMashin = editAlgo( TMashin ); break;
-		case 5: runAlgo( TMashin, path ); break;
+		case 5: runAlgo( TMashin, 1 ); break;
 		default: change = 0;
 		}
 	}

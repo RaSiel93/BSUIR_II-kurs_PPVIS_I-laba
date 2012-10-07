@@ -1,8 +1,8 @@
 #include "mashina.h";
 #include "conio.h"
-#include <iostream>
 #include <windows.h>
 
+#include <iostream>
 using std::cout;
 using std::cin;
 using std::endl;
@@ -10,177 +10,312 @@ using std::endl;
 #include <iomanip>
 using std::setfill;
 using std::setw;
-
-bool pathLog( const char* path );
-void pathIns( char* path );
-
+//-----------------------------------------
 Pravila::Pravila() {
 	actEl = -2;
 	actCar = -2;
 	go = -2;
+
+	number = -2;
+	next = 0;
 }
+
 int Pravila::getCar () const {
 	return actCar;
-}
-int Pravila::getEl () const {
-	return actEl;
-}
-int Pravila::getGo () const {
-	return go;
 }
 void Pravila::setCar( int temp ) {
 	actCar = temp;
 }
+int Pravila::getEl () const {
+	return actEl;
+}
 void Pravila::setEl( int temp ) {
 	actEl = temp;
+}
+int Pravila::getGo () const {
+	return go;
 }
 void Pravila::setGo( int temp ) {
 	go = temp;
 }
+
+//----------------------------------------
+void MashinTuring::AddPravilo( int temp2, int temp1, int E, int C, int G ) {
+	Pravila *s = this->pravilo[ temp1 ];
+	while( s != NULL) {
+		if( s->getNum() == temp2 ) {
+			return; 
+		}
+		s = s -> getNext();
+	}
+	Pravila *t = new Pravila;
+	t->setNum( temp2 );
+	t->setNext( this->pravilo[ temp1 ] );
+	t->setEl( E );
+	t->setCar( C );
+	t->setGo( G );
+	this->pravilo[ temp1 ] = t;
+}
+
+Pravila *MashinTuring::SearchPravilo( int temp2, int temp1 ) {
+	Pravila *t = this->pravilo[ temp1 ];
+	while( t!=NULL ) {
+		if( t->getNum() == temp2 )
+			return t;
+		t = t->getNext();
+	}
+	return 0;
+}
+
+void MashinTuring::DelPravilo( int temp2, int temp1 ) {
+	if( this->SearchPravilo( temp1, temp2 ) )
+	{
+		Pravila *s = this->pravilo[ temp1 ];
+		Pravila *t = this->pravilo[ temp1 ]->getNext();
+		if( temp2 == s->getNum() ) {
+			delete s;
+			this->pravilo[ temp1 ] = t;
+			return;
+		}
+		while( t!=NULL ) {
+			if( t->getNum() == temp2 ) {
+				s->setNext( t->getNext() );
+				delete t;
+				return;
+			}
+			s = t;
+			t = t->getNext();	
+		}
+	}
+}
+void MashinTuring::ClearPravila() {
+	Pravila *t;
+	while( this->pravilo[ 0 ] != NULL ) {
+		t = this->pravilo[ 0 ];
+		this->pravilo[ 0 ] = this->pravilo[ 0 ]->getNext();
+		delete t;
+	}
+	while( this->pravilo[ 1 ] != NULL ) {
+		t = this->pravilo[ 1 ];
+		this->pravilo[ 1 ] = this->pravilo[ 1 ]->getNext();
+		delete t;
+	}
+}
 //-----------------------------------------
-ostream &operator<<( ostream &output, const Lenta lenta ) {
-	for( int i = 0; i < n; i++ )
-		output << lenta.getLenta( i ) << " ";
+ostream &operator<<( ostream &output, const MashinTuring *MT ) {
+	for( int i = MT->getHelpScreen(); i < MT->getHelpScreen() + 40; i++ ) {
+		Lenta *t = MT->lentMassiv;
+		while( t != NULL ) {
+			if( i == t->getInfo() ) {
+				cout << "1 ";
+				break;
+			}
+			t = t->getNext();
+		}
+		if( t == NULL )
+			cout << "0 ";
+	}
 	return output;
 }
-int Lenta::getLenta( int temp ) const {
-	return lenta[ temp ];
-}
-void Lenta::setLenta( int position, int temp ) {
-	if ( position > n || position < 0 || temp > 1 || temp < 0 ) 
-		return; 
-	lenta[ position ] = temp;		
-}
-void Lenta::clearLenta() {
-	for( int i = 0; i < n; i++ ) 
-		setLenta( i, 0 );
-	setCaretka( 20 );
-}
-int Lenta::getCaretka() const {
-		return caretka;
-	}
-void Lenta::setCaretka( int temp ) {
-	if ( temp < 0 ) temp = 0;
-	if ( temp > n - 1 ) temp = n - 1;
-	caretka = temp;
+istream &operator>>( istream &input, MashinTuring *MT ) {
+	int position;
+	input >> position;
+	MT->AddElement( position );
+	return input;
 }
 //-----------------------------------------
 MashinTuring::MashinTuring() {
-	tLenta.clearLenta();
+	lentMassiv = 0;
+	caretka = 100;
+	helpScreen = 0;
+	helpScreenPravila = 0;
+	pravilo[ 0 ] = 0;
+	pravilo[ 1 ] = 0;
 }
-Pravila MashinTuring::getPravilo( int x, int y ) {
-	return pravilo[ x ][ y ];
+MashinTuring::~MashinTuring() {
+	this->ClearElements();
+	this->ClearPravila();
 }
-void MashinTuring::setPravilo( int x, int y, int E, int C, int G ) {
-	pravilo[ x ][ y ].setEl( E );
-	pravilo[ x ][ y ].setCar( C );
-	pravilo[ x ][ y ].setGo( G );
+
+int MashinTuring::getCaretka() const {
+	return caretka;
 }
+void MashinTuring::setCaretka( int temp ) {
+	caretka = temp;
+}
+
+void MashinTuring::AddElement( int temp ) {
+	Lenta *s = this->lentMassiv;
+	while( s != NULL) {
+		if( s->getInfo() == temp ) {
+			return; 
+		}
+		s = s -> getNext();
+	}
+	Lenta *t = new Lenta;
+	t->setInfo( temp );
+	t->setNext( this->lentMassiv );
+	this->lentMassiv = t;
+}
+
+bool MashinTuring::SearchElement( int temp ) {
+	Lenta *t = this->lentMassiv;
+	while( t!=NULL ) {
+		if( t->getInfo() == temp )
+			return 1;
+		t = t->getNext();
+	}
+	return 0;
+}
+
+void MashinTuring::DelElement( int temp ) {
+	if( this->SearchElement( temp ) )
+	{
+		Lenta *s = this->lentMassiv;
+		Lenta *t = this->lentMassiv->getNext();
+		if( temp == s->getInfo() ) {
+			delete s;
+			this->lentMassiv = t;
+			return;
+		}
+		while( t!=NULL ) {
+			if( t->getInfo() == temp ) {
+				s->setNext( t->getNext() );
+				delete t;
+				return;
+			}
+			s = t;
+			t = t->getNext();	
+		}
+	}
+}
+
+void MashinTuring::ClearElements() {
+	Lenta *t;
+	while( this->lentMassiv != NULL ) {
+		t = this->lentMassiv;
+		this->lentMassiv = this->lentMassiv->getNext();
+		delete t;
+	}
+}
+//-----------------------------------------
 void MashinTuring::printPravilo( int x, int y ) {
-	if( this->getPravilo( x, y ).getEl() == -2 )
-		cout << " ";
+	if( !this->SearchPravilo( x, y ) )
+		cout << "    ";
+	else {
+	cout << this->SearchPravilo( x, y )->getEl();
+	
+	if( this->SearchPravilo( x, y )->getCar() == -1 ) cout << "<";
+	if( this->SearchPravilo( x, y )->getCar() == 1 ) cout << ">";
+	if( this->SearchPravilo( x, y )->getCar() == 0 ) cout << "-";
+	
+	if( this->SearchPravilo( x, y )->getGo() == -1 ) cout << "S ";
 	else
-		cout << this->getPravilo( x, y ).getEl();
-	if( this->getPravilo( x, y ).getCar() == -2 ) cout << " ";
-	if( this->getPravilo( x, y ).getCar() == -1 ) cout << "<";
-	if( this->getPravilo( x, y ).getCar() == 1 ) cout << ">";
-	if( this->getPravilo( x, y ).getCar() == 0 ) cout << "-";
-	if( this->getPravilo( x, y ).getGo() == -1 ) 
-		cout << "S ";
-	else if( this->getPravilo( x, y ).getGo() == -2 )
-		cout << "  ";
-	else
-		cout << setfill( '0' ) << setw (2) << this->getPravilo( x, y ).getGo() + 1;
+		cout << setfill( '0' ) << setw (2) << this->SearchPravilo( x, y )->getGo() + 1;
+	}
 }
+
 void MashinTuring::printStatusAlgo() {
 	cout << "===============================================================================" << endl;
 	cout << " / ";
-	for( int i = 0; i < 15; i++ )
+	for(  int i = getHelpScreenPravila(); i < getHelpScreenPravila() + 15; i++ )
 		cout << "| Q" << setfill( '0' ) << setw(2) << i + 1;
 	cout << endl;
 	cout << " 0 ";
-	for( int x = 0, y = 0; x < 15; x++ ) {
+	for( int i = getHelpScreenPravila(); i < getHelpScreenPravila() + 15; i++ ) {
 		cout << "|"; 
-		this->printPravilo( x, y );
+		this->printPravilo( i, 0 );
 	}
 	cout << endl;
 	cout << " 1 ";
-	for( int x = 0, y = 1; x < 15; x++ ) {
+	for( int i = getHelpScreenPravila(); i < getHelpScreenPravila() + 15; i++ ) {
 		cout << "|"; 
-		this->printPravilo( x, y );
+		this->printPravilo( i, 1 );
 	}
 	cout << endl;
 	cout << "===============================================================================" << endl;
 }
 
 int MashinTuring::stepGo( int x, int y ) {
-	this->tLenta.setLenta( this->tLenta.getCaretka(), this->getPravilo( x, y ).getEl() );
-	this->tLenta.setCaretka( this->tLenta.getCaretka() + this->getPravilo( x, y ).getCar() );
-	return this->getPravilo( x, y ).getGo();
+	if ( this->SearchPravilo( x, y )->getEl() )
+		this->AddElement( this->getCaretka() );
+	else 
+		this->DelElement( this->getCaretka() );
+	this->setCaretka( this->getCaretka() + this->SearchPravilo( x, y )->getCar() );
+	return this->SearchPravilo( x, y )->getGo();
 }
 
 int MashinTuring::searchStop( int position ) {
-	char textA1[] = "Алгоритм успешно завершен!\0", text0[ 50 ];
-	char textE1[] = "Ошибка! Нет правила для текущей ячейки.\0", text1[ 50 ];
-	char textE2[] = "Ошибка! Выход за пределы ленты.\0", text2[ 50 ];
-	CharToOem ( textA1, text0 ); CharToOem ( textE1, text1 ); CharToOem ( textE2, text2 );
-	if( position == -1 )
-		cout << text0;
-	else
-		if( this->tLenta.getLenta( this->tLenta.getCaretka() ) == 0 && this->getPravilo( position, 0 ).getGo() == -2 ||  this->tLenta.getLenta( this->tLenta.getCaretka() ) == 1 && this->getPravilo( position, 1 ).getGo() == -2 )
-			cout << text1;
-		else
-			if( this->tLenta.getCaretka() == 0 || this->tLenta.getCaretka() == n - 1 )
-			cout << text2;
-			else return 1;
+	char textE2[] = "Алгоритм успешно завершен!\0", text1[ 50 ];
+	CharToOem ( textE2, text1 );
+	char textA1[] = "Ошибка! Нет правила для текущей ячейки.\0", text2[ 50 ];
+	CharToOem ( textA1, text2 );
+	if( position == -1 ) {
+		cout << text1 << endl;
+		return 1;
+	} else if( !this->SearchElement( this->getCaretka() ) && !( this->SearchPravilo( position, 0 ) ) ||  this->SearchElement( this->getCaretka() ) && !( this->SearchPravilo( position, 1 ) ) ) {
+		cout << text2 << endl;
+		return 1;
+	}
+	cout << endl;
 	return 0;
+}
+//---------------------------------------
+void MashinTuring::helpScreenEdit( MashinTuring *MT ) {
+	if( MT->getHelpScreen() - MT->getCaretka() < - 39 ) MT->setHelpScreen( MT->getHelpScreen() + 1 );		
+	if( MT->getHelpScreen() - MT->getCaretka() > 0 ) MT->setHelpScreen( MT->getHelpScreen() - 1 );
+}
+
+void MashinTuring::helpScreenEditPravila( MashinTuring *MT, int position ) {
+	if( position > 7 ) {
+		if( MT->getHelpScreenPravila() - position < - 15 ) MT->setHelpScreenPravila( position + 7 );		
+		if( MT->getHelpScreenPravila() - position > 0 ) MT->setHelpScreenPravila( position - 7 ); 
+	}
+	else 
+		MT->setHelpScreenPravila( 0 );
 }
 //---------------------------------------
 MashinTuring* creatAlgo( const char* path ) {
 	char tempPath[ 50 ];
-	strcpy( tempPath, path );
-	pathIns( tempPath );
 	char textL1[] = "Алгоритм успешно создан: \0", text1[ 50 ];
 	CharToOem ( textL1, text1 );
 	char textL2[] = "Ошибка создания файла: \0", text2[ 50 ];
 	CharToOem ( textL2, text2 );
 	
 	FILE *Fc;
-	if( !( Fc = fopen( tempPath, "wb" ) ) )
+	if( !( Fc = fopen( path, "wb" ) ) )
 	{
-		cout << text2 << tempPath << endl;
+		cout << text2 << path << endl;
 		exit( 1 );
 	}
 	fclose( Fc );
-	cout << text1 << tempPath;
+	cout << text1 << path;
 	getch();
 	MashinTuring *MT = new MashinTuring;
 	return MT;
 }
+
 MashinTuring* loadAlgo( const char* path ) {
-	char tempPath[ 50 ];
-	strcpy( tempPath, path );
-	pathIns( tempPath );
 	char textL1[] = "Алгоритм успешно загружен: \0", text1[ 50 ];
 	CharToOem ( textL1, text1 );
 	char textL2[] = "Ошибка загрузки файла: \0", text2[ 50 ];
 	CharToOem ( textL2, text2 );
 	
 	int temp, count, t1, t2, t3, t4, t5;
-	FILE *Fr = fopen( tempPath, "r" );
+	FILE *Fr = fopen( path, "r" );
 	if( !Fr ) {
-		cout << text2 << tempPath;
+		cout << text2 << path;
 		exit( 1 );
 	}
 	
 	MashinTuring *MT = new MashinTuring;
 
 	fscanf( Fr, "%d", &temp );
-	MT->tLenta.setCaretka( temp );
+	MT->setCaretka( temp );
 	fscanf( Fr, "%d", &count );
 	for( int i = 0; i < count; i++ ) {
 		fscanf ( Fr, "%d", &temp );
-		MT->tLenta.setLenta( temp, 1 );
+		MT->AddElement( temp );
 	}
 	fscanf( Fr, "%d", &count );
 	for( int i = 0; i < count; i++ ) {
@@ -189,64 +324,64 @@ MashinTuring* loadAlgo( const char* path ) {
 		fscanf( Fr, "%d", &t3 );
 		fscanf( Fr, "%d", &t4 );
 		fscanf( Fr, "%d", &t5 );
-		MT->setPravilo( t1 - 1, t2, t3, t4, t5 - 1 );
+		MT->AddPravilo( t1 - 1, t2, t3, t4, t5 - 1 );
 	}
 	fclose( Fr );
-	cout << text1 << tempPath;
+	cout << text1 << path;
 	getch();
 	return MT;
 }
+
 void saveAlgo( MashinTuring *MT, const char *path ) {
-	char tempPath[ 50 ];
-	strcpy( tempPath, path );
-	pathIns( tempPath );
 	char textL1[] = "Алгоритм успешно сохранен: \0", text1[ 50 ];
 	CharToOem ( textL1, text1 );
 	char textL2[] = "Ошибка сохранения файла: \0", text2[ 50 ];
 	CharToOem ( textL2, text2 );
 	
 	int temp, count = 0, t1, t2, t3, t4, t5;
-	FILE *Fw = fopen( tempPath, "wb" );
+	FILE *Fw = fopen( path, "wb" );
 	if( !Fw ) {
-		cout << text2 << tempPath;
+		cout << text2 << path;
 		exit( 1 );
 	}
 
-	fprintf( Fw, "%d\n", MT->tLenta.getCaretka() );
-	for( int i = 0; i < n; i++ ) {
-		if( MT->tLenta.getLenta( i ) )
+	fprintf( Fw, "%d\n", MT->getCaretka() );
+	for( int i = 0; i < 40; i++ ) {
+		if( MT->SearchElement( i ) )
 			count++;
 	}
 	fprintf( Fw, "%d\n", count );
-	for( int i = 0; i < n; i++ ) {
-		if( MT->tLenta.getLenta( i ) ) {
+	
+	for( int i = 0; i < 40; i++ ) {
+		if( MT->SearchElement( i ) ) {
 			fprintf( Fw, "%d\n", i );
 		}
 	}
+
 	count = 0;
 	for( int x = 0; x < 15; x++ ) {
 		for ( int y = 0; y < 2; y++ )
-			if( MT->getPravilo( x, y ).getGo() != -2 )
+			if( MT->SearchPravilo( x, y ) )
 				count++;
 	}
 	fprintf( Fw, "%d\n", count );
-	//+++
 	for( int y = 0; y < 2; y++ ) {
 		for ( int x = 0; x < 15; x++ ) {
-			if( MT->getPravilo( x, y ).getGo() != -2 )
+			if( MT->SearchPravilo( x, y ) )
 			{
 				fprintf( Fw, "%d ", x + 1 );
 				fprintf( Fw, "%d ", y );
-				fprintf( Fw, "%d ", MT->getPravilo( x, y ).getEl() );
-				fprintf( Fw, "%d ", MT->getPravilo( x, y ).getCar() );
-				fprintf( Fw, "%d\n", MT->getPravilo( x, y ).getGo() + 1 );
+				fprintf( Fw, "%d ", MT->SearchPravilo( x, y )->getEl() );
+				fprintf( Fw, "%d ", MT->SearchPravilo( x, y )->getCar() );
+				fprintf( Fw, "%d\n", MT->SearchPravilo( x, y )->getGo() + 1 );
 			}
 		}
 	}
 	fclose( Fw );
-	cout << text1 << tempPath;
+	cout << text1 << path;
 	getch();
 }
+
 MashinTuring* editAlgo( MashinTuring *MT ) {
 	char textE1[] = "Файл не создан.\0", text1[ 50 ];
 	CharToOem ( textE1, text1 );
@@ -257,11 +392,13 @@ MashinTuring* editAlgo( MashinTuring *MT ) {
 	char textT2[] = "Введите позицию правила. Пример: 9 1 это Q09/1: \0", text2[ 80 ];
 	char textT3[] = "Введите действие над текущей ячейкой (0 или 1), сдвиг каретки (-1, 0, 1) и позицию следующего правила( или 0 - stop ). Пример: 0 1 8 это изменить содержимое на 0, сдвинуть каретку влево, перейти на правило Q08: \0", text3[ 220 ];
 	CharToOem ( textT1, text1 ); CharToOem ( textT2, text2 ); CharToOem ( textT3, text3 );
+	MT->setHelpScreen( MT->getCaretka() - 20 );
 	while ( change != 13 ) {
 		change = -1;
-		cout << MT->tLenta;
-		int size = MT->tLenta.getCaretka();
-		for( int i = 0; i < MT->tLenta.getCaretka(); i++ ) {
+		MT->helpScreenEdit( MT );
+		cout << MT;
+		int size = MT->getCaretka();
+		for( int i = MT->getHelpScreen(); i < MT->getCaretka(); i++ ) {
 			cout << "  ";
 		}
 		cout << "^" << endl;
@@ -273,14 +410,14 @@ MashinTuring* editAlgo( MashinTuring *MT ) {
 		cout << text1 << endl;
 		change = getch();
 		if ( change == 77 )
-			MT->tLenta.setCaretka( ++size );
+			MT->setCaretka( ++size );
 		if ( change == 75 )
-			MT->tLenta.setCaretka( --size );
+			MT->setCaretka( --size );
 		if (change == 32 )
-			if( MT->tLenta.getLenta( size ) == 1 )
-				MT->tLenta.setLenta( size, 0 );
+			if( MT->SearchElement( size ) )
+				MT->DelElement( size );
 			else
-				MT->tLenta.setLenta( size, 1 );
+				MT->AddElement( size );
 		switch ( change - 48 ) {
 		case 1:
 			
@@ -289,7 +426,7 @@ MashinTuring* editAlgo( MashinTuring *MT ) {
 			while( 1 ) {
 				cin >> x >> y;
 				x -= 1;
-				if ( y < 0 || y > 1 || x < 0 || x > 14 ) cout << "Invalid data!" << endl; 
+				if ( y < 0 || y > 1 || x < 0 ) cout << "Invalid data!" << endl; 
 				else break;
 			}
 			
@@ -297,21 +434,18 @@ MashinTuring* editAlgo( MashinTuring *MT ) {
 				cout << endl << text3;
 				cin >> a >> s >> p;
 				p -= 1;
-				MT->setPravilo( x, y, a, s, p );
+				MT->AddPravilo( x, y, a, s, p );
 			}
 			else 
-				MT->setPravilo( x, y, -2, -2, -2 );
+				MT->DelPravilo( x, y );
 			system( "CLS" );
 			break;
 		case 3:
-			for( int x = 0; x < 15; x++ ) {
-				MT->setPravilo( x, 0, -2, -2, -2 );
-				MT->setPravilo( x, 1, -2, -2, -2 );
-			}
+			MT->ClearPravila();
 			system( "CLS" );
 			break;
 		case 4:
-			MT->tLenta.clearLenta();
+			MT->ClearElements();
 			system( "CLS" );
 			break;
 		case 5: change = 13; 
@@ -326,52 +460,45 @@ MashinTuring* editAlgo( MashinTuring *MT ) {
 	}
 	return MT;
 }
-void runAlgo( MashinTuring *MT, const char* path ) {
+
+void runAlgo( MashinTuring *MT, bool log ) {
 	char textE1[] = "Файл не создан.\0", text1[ 50 ];
 	CharToOem ( textE1, text1 );
 	if ( MT != 0 ) {
+		MT->setHelpScreen( MT->getCaretka() - 20 );
+		int position = 0, stop = 0;
+		while ( !stop ) { 
+			system( "CLS" );
+			stop = MT->searchStop( position );
+			MT->helpScreenEdit( MT );
+			cout << MT;	
+			for( int i = MT->getHelpScreen(); i < MT->getCaretka(); i++ ) 
+				cout << "  ";
+			cout << "^" << endl;
 
-	int position = 0;
-	int run = 1;
-	while ( run ) { 
-		position = MT->stepGo( position, MT->tLenta.getLenta( MT->tLenta.getCaretka() ));
-		system( "CLS" );
-		cout << MT->tLenta;	
-		for( int i = 0; i < MT->tLenta.getCaretka(); i++ ) 
-			cout << "  ";
-		cout << "^" << endl;
-		MT->printStatusAlgo();
-		if ( pathLog( path ) ) {
-			if( position != -1 ) {
+			//cout << position << "		" << MT->getHelpScreenPravila() << endl;	
+			MT->helpScreenEditPravila( MT, position );
+			MT->printStatusAlgo();	
+			
+			if( log ) {
 				cout << "    ";
-				for( int i = 0; i < position; i++ )
+				for( int i = MT->getHelpScreenPravila(); i < position; i++ )
 					cout << "     ";
 				cout << "^^^^" << endl;
+
 				cout << "Q" << setfill( '0' ) << setw( 2 ) << position + 1 << " : "; 
-				MT->printPravilo( position, MT->tLenta.getLenta( MT->tLenta.getCaretka() ) );
-				cout << endl;
+				MT->printPravilo( position, MT->SearchElement( MT->getCaretka() ) );
+				
+				getch();
 			}
+			if( !stop ) position = MT->stepGo( position, MT->SearchElement( MT->getCaretka() ) );
+			//Sleep( 1000 );
 		}
-		run = MT->searchStop( position );
-		//Sleep( 1000 );
-	}
-	getch();
+		getch();
 	}
 	else {
 		cout << text1;
 		getch();
 	}
 	return;
-}
-void pathIns( char* path ) {
-	if ( pathLog( path ) ) {
-		int len = strlen( path );
-		path[ len - 5 ] = '\0';
-	}
-}
-bool pathLog( const char* path ) {
-	char log[] = "-log\0";
-	if( strstr( path, log ) )
-		return 1;
-	return 0;
 }
