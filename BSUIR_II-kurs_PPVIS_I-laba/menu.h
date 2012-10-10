@@ -1,4 +1,4 @@
-int menu( int, char* );
+int menu( int, char*, bool );
 void change( int &, int, char* );
 char* textSearch( char*, int & );
-void testcaseMenu( char* );
+void testcaseMenu( char*, bool );

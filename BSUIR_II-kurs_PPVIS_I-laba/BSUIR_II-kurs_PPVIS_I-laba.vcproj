@@ -40,6 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="&quot;C:\UnitTest++\src&quot;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -57,6 +58,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="UnitTest++.vsnet2005.lib"
+				AdditionalLibraryDirectories="&quot;C:\UnitTest++\Debug&quot;"
 				GenerateDebugInformation="true"
 				TargetMachine="1"
 			/>

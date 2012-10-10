@@ -44,43 +44,49 @@ private:
 };
 
 class MashinTuring {
-friend ostream &operator<<( ostream &, const MashinTuring* );
-friend istream &operator>>( istream &, MashinTuring* );
+friend ostream &operator<<( ostream &, const MashinTuring & );
+friend istream &operator>>( istream &, MashinTuring & );
 
-friend MashinTuring* creatAlgo( const char* );
-friend MashinTuring* loadAlgo( const char* );
-friend void saveAlgo( MashinTuring*, const char* );
-friend MashinTuring* editAlgo( MashinTuring* );
-friend void runAlgo( MashinTuring*, bool );
+
+friend MashinTuring &creatAlgo( const char* );
+friend MashinTuring &loadAlgo( const char* );
+friend void saveAlgo( MashinTuring&, const char* );
+friend MashinTuring &editAlgo( MashinTuring & );
+friend void runAlgo( MashinTuring&, bool );
 
 public:
+	bool operator==( const MashinTuring & ) const;
+	MashinTuring &operator++();
+	MashinTuring &operator--();
+
 	MashinTuring();
+	MashinTuring( const MashinTuring &);
 	~MashinTuring();
 //каретка	
 	int getCaretka() const;
 	void setCaretka( int );
 //лента
 	void AddElement( int );
-	bool SearchElement( int );
+	bool SearchElement( int ) const;
 	void DelElement( int );
 	void ClearElements();
 //правила
 	void AddPravilo( int, int, int, int, int );
-	Pravila *SearchPravilo( int, int );
+	Pravila *SearchPravilo( int, int ) const;
 	void DelPravilo( int, int );
 	void ClearPravila();
 //вспомогательные элементы для отображения правил
 	int getHelpScreenPravila() const { return helpScreenPravila; }
 	void setHelpScreenPravila( int temp ){ helpScreenPravila = temp; }
-	void helpScreenEditPravila( MashinTuring *, int );
+	void helpScreenEditPravila( MashinTuring &, int );
 //вспомогательные элементы для отображения ленты
 	int getHelpScreen() const { return helpScreen; }
 	void setHelpScreen( int temp ){ helpScreen = temp; }
-	void helpScreenEdit( MashinTuring * );
-private:
+	void helpScreenEdit( MashinTuring & );
 //вывод ленты и правил
 	void printStatusAlgo();
 	void printPravilo( int, int );
+private:
 //шаги алгаритма и проверка на остановку
 	int stepGo( int, int );
 	int searchStop( int );	

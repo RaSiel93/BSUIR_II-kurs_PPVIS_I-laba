@@ -8,9 +8,14 @@
 using std::cout;
 using std::endl;
 
-int menu( int count, char* selected ) {
+int menu( int count, char* selected, bool flag ) {
+	char textLogo[] = "Машина Тьюринга\0", textLogoR[ 20 ];
+	CharToOem( textLogo, textLogoR );
 	int button = 0, position = 0;
 	while( button != 13 ) {
+		cout << "\t\t\t\t" << textLogoR ;
+		if( flag ) cout << "  mode: -log ";
+		cout << "\n ______________________________________________________________________________\n\n";
 		change( position, count, selected );
 		button = getch();
 		system( "CLS" );
@@ -22,6 +27,9 @@ int menu( int count, char* selected ) {
 		}
 		if ( button > 48 && button < 49 + count ) {
 			position = button - 49;
+			cout << "\t\t\t\t" << textLogoR ;
+			if( flag ) cout << "  mode: -log ";
+			cout << "\n ______________________________________________________________________________\n\n";
 			change( position, count, selected );
 			system( "CLS" );
 			return position + 1; 
@@ -43,7 +51,16 @@ void change ( int &m, int count, char* textSelected ) {
 		char temp[ 30 ];
 		CharToOem( textSearch( textSelected, pos ), temp );
 		cout << i + 1 << ". " << temp << endl;
+		
+		char a = 29;
+		cout << "  ";
+		for( int i = 0; i < 76; i++) {
+			cout << a;
+		}
+		cout << endl << endl;
+		
 	}
+	cout << "\t\t\t\t\t\t\t\t      v.0.9.1";
 }
 
 char* textSearch( char* string, int &posString ) {
@@ -60,18 +77,18 @@ char* textSearch( char* string, int &posString ) {
 	return textPoint;
 }
 
-void testcaseMenu( char* path ) {
+void testcaseMenu( char* path, bool flag ) {
 	int change = -1;
-	MashinTuring *TMashin = 0;
+	MashinTuring TMashin;
 	while( change ) {
 		system( "CLS" );	
-		change = menu( 6, "Создать алгоритм;Загрузить алгоритм;Сохранить алгоритм;Редактировать алгоритм;Запустить;Выйти");
+		change = menu( 6, "Создать алгоритм;Загрузить алгоритм;Сохранить алгоритм;Редактировать алгоритм;Запустить;Выйти", flag );
 		switch( change ) {
 		case 1: TMashin = creatAlgo( path ); break;
 		case 2: TMashin = loadAlgo( path ); break;
 		case 3: saveAlgo( TMashin, path ); break;
 		case 4: TMashin = editAlgo( TMashin ); break;
-		case 5: runAlgo( TMashin, 1 ); break;
+		case 5: runAlgo( TMashin, flag ); break;
 		default: change = 0;
 		}
 	}
