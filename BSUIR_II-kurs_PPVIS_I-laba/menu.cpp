@@ -15,7 +15,7 @@ int menu( int count, char* selected, bool flag ) {
 	while( button != 13 ) {
 		cout << "\t\t\t\t" << textLogoR ;
 		if( flag ) cout << "  mode: -log ";
-		cout << "\n ______________________________________________________________________________\n\n";
+		cout << "\n ______________________________________________________________________________\n";
 		change( position, count, selected );
 		button = getch();
 		system( "CLS" );
@@ -29,7 +29,7 @@ int menu( int count, char* selected, bool flag ) {
 			position = button - 49;
 			cout << "\t\t\t\t" << textLogoR ;
 			if( flag ) cout << "  mode: -log ";
-			cout << "\n ______________________________________________________________________________\n\n";
+			cout << "\n ______________________________________________________________________________\n";
 			change( position, count, selected );
 			system( "CLS" );
 			return position + 1; 
@@ -57,7 +57,7 @@ void change ( int &m, int count, char* textSelected ) {
 		for( int i = 0; i < 76; i++) {
 			cout << a;
 		}
-		cout << endl << endl;
+		cout << endl;
 		
 	}
 	cout << "\t\t\t\t\t\t\t\t      v.0.9.1";
@@ -81,7 +81,7 @@ void testcaseMenu( char* path, bool flag ) {
 	int change = -1;
 	MashinTuring TMashin;
 	while( change ) {
-		system( "CLS" );	
+		system( "CLS" );
 		change = menu( 6, "Создать алгоритм;Загрузить алгоритм;Сохранить алгоритм;Редактировать алгоритм;Запустить;Выйти", flag );
 		switch( change ) {
 		case 1: TMashin = creatAlgo( path ); break;

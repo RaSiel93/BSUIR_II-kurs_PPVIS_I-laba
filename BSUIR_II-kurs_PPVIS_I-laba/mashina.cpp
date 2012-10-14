@@ -1,16 +1,5 @@
 #include "mashina.h";
-#include "conio.h"
-#include <windows.h>
 
-#include <iostream>
-using std::cout;
-using std::cin;
-using std::endl;
-
-#include <iomanip>
-using std::setfill;
-using std::setw;
-//-----------------------------------------
 Pravila::Pravila() {
 	actEl = -2;
 	actCar = -2;
@@ -124,6 +113,31 @@ istream &operator>>( istream &input, MashinTuring &MT ) {
 	return input;
 }
 
+MashinTuring &MashinTuring::operator=( const MashinTuring &MT ) {
+	this->setCaretka( MT.getCaretka() );
+	this->setHelpScreen( MT.getHelpScreen() );
+	this->setHelpScreenPravila( MT.getHelpScreenPravila() );
+	Lenta *t = MT.lentMassiv;
+	this->lentMassiv = 0;
+	while( t != NULL ) {
+		this->AddElement( t->getInfo() );
+		t = t -> getNext();
+	}
+	Pravila *p = MT.pravilo[ 0 ];
+	this->pravilo[ 0 ] = 0;
+	while( p != NULL) {
+		this->AddPravilo( p->getNum(), 0, p->getEl(), p->getCar(), p->getGo() );
+		p = p->getNext();
+	}
+	p = MT.pravilo[ 1 ];
+	this->pravilo[ 1 ] = 0;
+	while( p != NULL) {
+		this->AddPravilo( p->getNum(), 1, p->getEl(), p->getCar(), p->getGo() );
+		p = p->getNext();
+	}
+	return *this;
+}
+
 MashinTuring &MashinTuring::operator++(){
 	this->setCaretka( this->getCaretka() + 1 );
 	return *this;
@@ -132,6 +146,10 @@ MashinTuring &MashinTuring::operator++(){
 MashinTuring &MashinTuring::operator--(){
 	this->setCaretka( this->getCaretka() - 1 );
 	return *this;
+}
+
+bool MashinTuring::operator[]( int subscript ) const {
+	return this->SearchElement( subscript );
 }
 
 bool MashinTuring::operator==( const MashinTuring &MT ) const {
@@ -188,6 +206,62 @@ bool MashinTuring::operator==( const MashinTuring &MT ) const {
 		p = p->getNext();
 	}
 	return 1;
+}
+
+bool MashinTuring::operator!=( const MashinTuring &MT ) const {
+	if( this->getCaretka() != MT.getCaretka() )
+		return 1;
+	
+	Lenta *t = MT.lentMassiv;
+	while( t != NULL ) {
+		if( !MT.SearchElement( this->lentMassiv->getInfo() ) ) 
+			return 1;
+		t = t->getNext();
+	}
+	t = this->lentMassiv;
+	while( t != NULL ) {
+		if( !this->SearchElement( MT.lentMassiv->getInfo() ) ) 
+			return 1;
+		t = t->getNext();
+	}
+
+	Pravila *p = MT.pravilo[ 0 ], *s;
+	while( p != NULL ) {
+		if( !( s = MT.SearchPravilo( this->pravilo[ 0 ]->getNum(), 0 ) ) ) 
+			return 0;
+		if( s->getCar() != this->pravilo[ 0 ]->getCar()) return 1;
+		if( s->getEl() != this->pravilo[ 0 ]->getEl()) return 1;
+		if( s->getGo() != this->pravilo[ 0 ]->getGo()) return 1;
+		p = p->getNext();
+	}	
+	p = MT.pravilo[ 1 ];
+	while( p != NULL ) {
+		if( !( s = MT.SearchPravilo( this->pravilo[ 1 ]->getNum(), 1 ) ) ) 
+			return 1;
+		if( s->getCar() != this->pravilo[ 1 ]->getCar()) return 1;
+		if( s->getEl() != this->pravilo[ 1 ]->getEl()) return 1;
+		if( s->getGo() != this->pravilo[ 1 ]->getGo()) return 1;
+		p = p->getNext();
+	}
+	p = this->pravilo[ 0 ];
+	while( p != NULL ) {
+		if( !( s = this->SearchPravilo( MT.pravilo[ 0 ]->getNum(), 0 ) ) ) 
+			return 1;
+		if( s->getCar() != MT.pravilo[ 0 ]->getCar()) return 1;
+		if( s->getEl() != MT.pravilo[ 0 ]->getEl()) return 1;
+		if( s->getGo() != MT.pravilo[ 0 ]->getGo()) return 1;
+		p = p->getNext();
+	}	
+	p = this->pravilo[ 1 ];
+	while( p != NULL ) {
+		if( !( s = this->SearchPravilo( MT.pravilo[ 1 ]->getNum(), 1 ) ) ) 
+			return 1;
+		if( s->getCar() != MT.pravilo[ 1 ]->getCar()) return 1;
+		if( s->getEl() != MT.pravilo[ 1 ]->getEl()) return 1;
+		if( s->getGo() != MT.pravilo[ 1 ]->getGo()) return 1;
+		p = p->getNext();
+	}
+	return 0;
 }
 //-----------------------------------------
 MashinTuring::MashinTuring() {

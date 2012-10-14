@@ -1,6 +1,22 @@
+#include "conio.h"
+#include <windows.h>
+
 #include <iostream>
 using std::ostream;
 using std::istream;
+using std::cout;
+using std::cin;
+using std::endl;
+
+#include <iomanip>
+using std::setfill;
+using std::setw;
+
+#include <fstream>
+#include <string>
+#include <fstream>
+
+using namespace std;
 
 class Pravila {
 public:
@@ -38,6 +54,7 @@ public:
 //номер единичной €чейки
 	int getInfo() { return this->info; }
 	void setInfo( int temp ) { this->info = temp; }
+
 private:
 	int info;
 	Lenta *next;
@@ -47,7 +64,6 @@ class MashinTuring {
 friend ostream &operator<<( ostream &, const MashinTuring & );
 friend istream &operator>>( istream &, MashinTuring & );
 
-
 friend MashinTuring &creatAlgo( const char* );
 friend MashinTuring &loadAlgo( const char* );
 friend void saveAlgo( MashinTuring&, const char* );
@@ -56,11 +72,14 @@ friend void runAlgo( MashinTuring&, bool );
 
 public:
 	bool operator==( const MashinTuring & ) const;
+	bool operator!=( const MashinTuring & ) const;
+	MashinTuring &operator=( const MashinTuring & );
 	MashinTuring &operator++();
 	MashinTuring &operator--();
+	bool operator[]( int ) const;
 
 	MashinTuring();
-	MashinTuring( const MashinTuring &);
+	MashinTuring( const MashinTuring & );
 	~MashinTuring();
 //каретка	
 	int getCaretka() const;
