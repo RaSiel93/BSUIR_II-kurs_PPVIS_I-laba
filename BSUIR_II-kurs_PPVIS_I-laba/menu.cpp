@@ -84,11 +84,11 @@ void testcaseMenu( char* path, bool flag ) {
 		system( "CLS" );
 		change = menu( 6, "Создать алгоритм;Загрузить алгоритм;Сохранить алгоритм;Редактировать алгоритм;Запустить;Выйти", flag );
 		switch( change ) {
-		case 1: TMashin = creatAlgo( path ); break;
-		case 2: TMashin = loadAlgo( path ); break;
-		case 3: saveAlgo( TMashin, path ); break;
-		case 4: TMashin = editAlgo( TMashin ); break;
-		case 5: runAlgo( TMashin, flag ); break;
+		case 1: TMashin = creat( path, flag ); break;
+		case 2: TMashin = load( path, flag ); break;
+		case 3: save( TMashin, path, flag ); break;
+		case 4: TMashin = edit( TMashin, flag ); break;
+		case 5: TMashin = run( TMashin, flag ); break;
 		default: change = 0;
 		}
 	}

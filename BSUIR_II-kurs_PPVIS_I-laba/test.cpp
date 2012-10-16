@@ -69,15 +69,20 @@ TEST( test5 )
 TEST( test6 )
 {
 	MashinTuring ob;
-
 	ob.setCaretka( 20 );
 	ob++;
 	CHECK( 21 == ob.getCaretka() );
-	ob--;
-	CHECK( 20 == ob.getCaretka() );
 }
 
 TEST( test7 )
+{
+	MashinTuring ob;
+	ob.setCaretka( 20 );
+	ob--;
+	CHECK( 19 == ob.getCaretka() );
+}
+
+TEST( test8 )
 {
 	MashinTuring ob;
 
@@ -102,7 +107,7 @@ TEST( test7 )
 	CHECK( !ob.SearchElement( 22 ) );
 }
 
-TEST( test8 )
+TEST( test9 )
 {
 	MashinTuring ob;
 	
@@ -110,12 +115,157 @@ TEST( test8 )
 	CHECK( ob.getHelpScreen() == 20 );
 }
 
-TEST( test9 )
+TEST( test10 )
 {
 	MashinTuring ob;
 	
 	ob.setHelpScreenPravila( 20 );
 	CHECK( ob.getHelpScreenPravila() == 20 );
+}
+
+TEST( test11 )
+{
+	MashinTuring ob1 = load( "testcase/test2.txt", 0 );
+	MashinTuring ob2 = load( "testcase/test2.txt", 0 );
+	MashinTuring ob3 = ob2;
+	ob3.setCaretka( 100000 );
+	CHECK( ob1 == ob2 );
+	CHECK( ob3 != ob2 ); 
+	CHECK( ob3 != ob1 );
+}
+
+TEST( test12 )
+{
+	MashinTuring ob1 = load( "testcase/test2.txt", 0 );
+	MashinTuring ob2;
+	CHECK( ob1 != ob2 );
+	
+	ob1.ClearElements();
+	CHECK( ob1 != ob2 );
+
+	ob1.ClearPravila();
+
+	CHECK( ob1 == ob2 );
+}
+
+TEST( test13 )
+{
+	MashinTuring ob1 = load( "testcase/test2.txt", 0 );
+	MashinTuring ob2;
+	ob2.setCaretka( 17 );
+
+	ob2.AddElement( 17 );
+	ob2.AddElement( 18 );
+	ob2.AddElement( 19 );
+	ob2.AddElement( 20 );
+
+	ob2.AddPravilo( 1 - 1, 0, 0, 1, 0 - 1 );
+	ob2.AddPravilo( 2 - 1, 0, 0, 1, 3 - 1 );
+	ob2.AddPravilo( 3 - 1, 0, 1, 1, 4 - 1 );
+	ob2.AddPravilo( 4 - 1, 0, 1,-1, 5 - 1 );
+	ob2.AddPravilo( 5 - 1, 0, 0,-1, 6 - 1 );
+	ob2.AddPravilo( 6 - 1, 0, 0, 1, 1 - 1 );
+	ob2.AddPravilo( 7 - 1, 0, 0, 1, 1 - 1 );
+	ob2.AddPravilo( 1 - 1, 1, 0, 1, 2 - 1 );
+	ob2.AddPravilo( 2 - 1, 1, 1, 1, 2 - 1 );
+	ob2.AddPravilo( 3 - 1, 1, 1, 1, 3 - 1 );
+	ob2.AddPravilo( 5 - 1, 1, 1,-1, 5 - 1 );
+	ob2.AddPravilo( 6 - 1, 1, 1,-1, 7 - 1 );
+	ob2.AddPravilo( 7 - 1, 1, 1,-1, 7 - 1 );
+
+	CHECK( ob1 == ob2 );
+}
+
+TEST( test14 )
+{
+	MashinTuring ob1 = load( "testcase/test2.txt", 0 );
+	MashinTuring ob2 = ob1;
+	ob1 = run( ob1, 0 );
+
+	ob2.ClearElements();
+
+	ob2.setCaretka( ob1.getCaretka() );
+
+	ob2.AddElement( 22 );
+	ob2.AddElement( 23 );
+	ob2.AddElement( 24 );
+	ob2.AddElement( 25 );
+	ob2.AddElement( 26 );
+	ob2.AddElement( 27 );
+	ob2.AddElement( 28 );
+	ob2.AddElement( 29 );
+
+	CHECK( ob1 == ob2 );
+}
+
+TEST( test15 )
+{
+	MashinTuring ob1 = load( "testcase/test2.txt", 0 );
+	ob1 = run( ob1, 0 );
+	save( ob1, "testcase/testSave2.txt", 0 );
+	MashinTuring ob2 = load( "testcase/testSave2.txt", 0 );
+	ob1.ClearElements();
+
+	ob1.setCaretka( ob2.getCaretka() );
+
+	ob1.AddElement( 22 );
+	ob1.AddElement( 23 );
+	ob1.AddElement( 24 );
+	ob1.AddElement( 25 );
+	ob1.AddElement( 26 );
+	ob1.AddElement( 27 );
+	ob1.AddElement( 28 );
+	ob1.AddElement( 29 );
+
+	CHECK( ob1 == ob2 );
+}
+
+TEST( test16 )
+{
+	MashinTuring ob1;
+	ob1.AddPravilo( 1, 1, 1, 1, 1 );
+	CHECK( ob1.SearchPravilo( 1, 1 ) );
+	ob1.DelPravilo( 1, 1 );
+	CHECK( !ob1.SearchPravilo( 1, 1 ) );
+}
+
+TEST( test17 )
+{
+	MashinTuring ob1;
+	ob1.AddPravilo( 1, 1, 1, 1, 1 );
+	CHECK( ob1.SearchPravilo( 1, 1 ) );
+	ob1.ClearPravila();
+	CHECK( !ob1.SearchPravilo( 1, 1 ) );
+}
+
+TEST( test18 )
+{
+	MashinTuring ob1;
+	ob1.AddPravilo( 1, 1, 1, 1, 1 );
+	ob1.setCaretka( 20 );
+	MashinTuring ob2 = ob1;
+
+	CHECK( ob1.SearchPravilo( 1, 1 ) );
+	
+	CHECK( ob1.stepGo( 1, 1 ) );
+	ob2.AddElement( 20 );
+	ob2++;
+	CHECK( ob1 == ob2 );
+}
+
+TEST( test19 )
+{
+	MashinTuring ob1;
+	
+	CHECK( ob1.searchStop( 1, 0 ) == 1 );
+}
+
+TEST( test20 )
+{
+	MashinTuring ob1;
+	ob1.AddPravilo( 1, 1, 1, 1, 666 );
+
+	CHECK( ob1.stepGo( 1, 1 ) == 666 );
 }
 
 int main( int argc, char const *argv[] )

@@ -64,11 +64,11 @@ class MashinTuring {
 friend ostream &operator<<( ostream &, const MashinTuring & );
 friend istream &operator>>( istream &, MashinTuring & );
 
-friend MashinTuring &creatAlgo( const char* );
-friend MashinTuring &loadAlgo( const char* );
-friend void saveAlgo( MashinTuring&, const char* );
-friend MashinTuring &editAlgo( MashinTuring & );
-friend void runAlgo( MashinTuring&, bool );
+friend MashinTuring &creat( const char*, bool );
+friend MashinTuring &load( const char*, bool );
+friend void save( MashinTuring&, const char*, bool );
+friend MashinTuring &edit( MashinTuring &, bool );
+friend MashinTuring &run( MashinTuring &, bool );
 
 public:
 	bool operator==( const MashinTuring & ) const;
@@ -105,10 +105,10 @@ public:
 //вывод ленты и правил
 	void printStatusAlgo();
 	void printPravilo( int, int );
-private:
 //шаги алгаритма и проверка на остановку
 	int stepGo( int, int );
-	int searchStop( int );	
+	int searchStop( int, bool );
+private:	
 //вспомогательная позиция для ленты и правил	
 	int helpScreen;
 	int helpScreenPravila;
