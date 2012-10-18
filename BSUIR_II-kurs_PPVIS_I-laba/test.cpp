@@ -268,6 +268,111 @@ TEST( test20 )
 	CHECK( ob1.stepGo( 1, 1 ) == 666 );
 }
 
+TEST( test21 )
+{
+	MashinTuring ob1, ob2;
+
+	CHECK( ob1 == ob2 );
+}
+
+TEST( test22 )
+{
+	MashinTuring ob1, ob2;
+
+	ob1.AddPravilo( 20, 1, 0, -1, 21 );
+	ob2.AddPravilo( 20, 0, 1, 1, 25 );
+	CHECK( ob1.SearchPravilo( 20, 1 )->getCar() == -1 );
+	CHECK( ob2.SearchPravilo( 20, 0 )->getCar() == 1 );
+}
+
+TEST( test23 )
+{
+	MashinTuring ob1, ob2;
+
+	ob1.AddPravilo( 20, 1, 0, -1, 21 );
+	ob2.AddPravilo( 20, 0, 1, 1, 25 );
+	CHECK( ob1.SearchPravilo( 20, 1 )->getEl() == 0 );
+	CHECK( ob2.SearchPravilo( 20, 0 )->getEl() == 1 );
+}
+
+TEST( test24 )
+{
+	MashinTuring ob1, ob2;
+
+	ob1.AddPravilo( 20, 1, 0, -1, 21 );
+	ob2.AddPravilo( 20, 0, 1, 1, 25 );
+	CHECK( ob1.SearchPravilo( 20, 1 )->getGo() == 21 );
+	CHECK( ob2.SearchPravilo( 20, 0 )->getGo() == 25 );
+}
+
+TEST( test25 )
+{
+	MashinTuring ob;
+	
+	ob.setHelpScreenPravila( 99999999 );
+	CHECK( ob.getHelpScreenPravila() == 99999999 );
+}
+
+TEST( test26 )
+{
+	MashinTuring ob;
+	
+	ob.setHelpScreen( -9999999 );
+	CHECK( ob.getHelpScreen() == -9999999 );
+}
+
+TEST( test27 )
+{
+	MashinTuring ob;
+
+	ob.AddElement( 20 );
+	ob.AddElement( 21 );
+	ob.AddElement( 22 );
+
+	ob.DelElement( 20 );
+	ob.DelElement( 21 );
+	ob.DelElement( 22 );
+
+	CHECK( !ob.SearchElement( 20 ) );
+	CHECK( !ob.SearchElement( 21 ) );
+	CHECK( !ob.SearchElement( 22 ) );
+}
+
+TEST( test28 )
+{
+	MashinTuring ob;
+
+	ob.AddElement( 20 );
+	ob.AddElement( 21 );
+	ob.AddElement( 22 );
+
+	ob.ClearElements();
+
+	CHECK( !ob.SearchElement( 20 ) );
+	CHECK( !ob.SearchElement( 21 ) );
+	CHECK( !ob.SearchElement( 22 ) );
+}
+
+TEST( test29 )
+{
+	MashinTuring ob1, ob2;
+
+	ob1.AddElement( 20 );
+	ob2.AddElement( 21 );
+
+	ob1.DelElement( 20 );
+	ob2.ClearElements();
+
+	CHECK( ob1 == ob2 );
+}
+
+TEST( test30 )
+{
+	MashinTuring ob;
+	ob.AddPravilo( 0, 1, 0, -1, 21 );
+	CHECK( !ob.SearchPravilo( 0, 1 )->getNum() );
+}
+
 int main( int argc, char const *argv[] )
 {
 	//testcaseMenu( "testcase/test2.txt", 0 );

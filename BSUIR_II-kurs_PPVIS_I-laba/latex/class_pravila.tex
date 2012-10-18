@@ -1,0 +1,113 @@
+\hypertarget{class_pravila}{\section{Pravila Class Reference}
+\label{class_pravila}\index{Pravila@{Pravila}}
+}
+
+
+Класс представляет набор правил к машине Тьюринга.  
+
+
+
+
+{\ttfamily \#include $<$mashina.\-h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_pravila_afabe600d43d6e281135cb984cd65b502}{\hyperlink{class_pravila_afabe600d43d6e281135cb984cd65b502}{Pravila} ()}\label{class_pravila_afabe600d43d6e281135cb984cd65b502}
+
+\begin{DoxyCompactList}\small\item\em Создаёт путое правило. \end{DoxyCompactList}\item 
+int \hyperlink{class_pravila_ab7a8c1dbcb465ae7533e04f400907667}{get\-El} () const 
+\item 
+\hypertarget{class_pravila_af41acc3fdae027f3cb3c8bf118ebc73f}{void \hyperlink{class_pravila_af41acc3fdae027f3cb3c8bf118ebc73f}{set\-El} (int)}\label{class_pravila_af41acc3fdae027f3cb3c8bf118ebc73f}
+
+\begin{DoxyCompactList}\small\item\em Задает номер действия над элементом, на котором, при выполнении правила, будет стоять каретка. \end{DoxyCompactList}\item 
+int \hyperlink{class_pravila_ae30dd7a60cbb1910b0c7d5cf16253e69}{get\-Car} () const 
+\item 
+\hypertarget{class_pravila_a321163286e7e8a9ae884e5ffb3781d14}{void \hyperlink{class_pravila_a321163286e7e8a9ae884e5ffb3781d14}{set\-Car} (int)}\label{class_pravila_a321163286e7e8a9ae884e5ffb3781d14}
+
+\begin{DoxyCompactList}\small\item\em Задает номер сдвига каретки, при выполнении правила. \end{DoxyCompactList}\item 
+int \hyperlink{class_pravila_a73b54739f3dfe3634186e4502e848cdd}{get\-Go} () const 
+\item 
+\hypertarget{class_pravila_ac33ed0c1dee3ef195ca8128213fe15c4}{void \hyperlink{class_pravila_ac33ed0c1dee3ef195ca8128213fe15c4}{set\-Go} (int)}\label{class_pravila_ac33ed0c1dee3ef195ca8128213fe15c4}
+
+\begin{DoxyCompactList}\small\item\em Задает номер следующего правила. \end{DoxyCompactList}\item 
+\hyperlink{class_pravila}{Pravila} $\ast$ \hyperlink{class_pravila_a4c51fe0e42588db81ec9322e46adb5a1}{get\-Next} ()
+\item 
+\hypertarget{class_pravila_a4883d0b8010e69a52326cf9e0a7d6b5e}{void \hyperlink{class_pravila_a4883d0b8010e69a52326cf9e0a7d6b5e}{set\-Next} (\hyperlink{class_pravila}{Pravila} $\ast$temp)}\label{class_pravila_a4883d0b8010e69a52326cf9e0a7d6b5e}
+
+\begin{DoxyCompactList}\small\item\em Задает следующее по стеку правило. \end{DoxyCompactList}\item 
+int \hyperlink{class_pravila_aab81ced5121ae7c11df191f35b0f4f2e}{get\-Num} () const 
+\item 
+\hypertarget{class_pravila_aa14d95501322be73d9c5f09d14027fe3}{void \hyperlink{class_pravila_aa14d95501322be73d9c5f09d14027fe3}{set\-Num} (int temp)}\label{class_pravila_aa14d95501322be73d9c5f09d14027fe3}
+
+\begin{DoxyCompactList}\small\item\em Задает номер правила в стеке. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Класс представляет набор правил к машине Тьюринга. 
+
+\begin{DoxyAuthor}{Author}
+Поплавский Александр Евгеньевич 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+октябрь 2012 года 
+\end{DoxyDate}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_pravila_ae30dd7a60cbb1910b0c7d5cf16253e69}{\index{Pravila@{Pravila}!get\-Car@{get\-Car}}
+\index{get\-Car@{get\-Car}!Pravila@{Pravila}}
+\subsubsection[{get\-Car}]{\setlength{\rightskip}{0pt plus 5cm}int Pravila\-::get\-Car (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const}}\label{class_pravila_ae30dd7a60cbb1910b0c7d5cf16253e69}
+\begin{DoxyReturn}{Returns}
+Номер сдвига каретки, при выполнении правила. 
+\end{DoxyReturn}
+\hypertarget{class_pravila_ab7a8c1dbcb465ae7533e04f400907667}{\index{Pravila@{Pravila}!get\-El@{get\-El}}
+\index{get\-El@{get\-El}!Pravila@{Pravila}}
+\subsubsection[{get\-El}]{\setlength{\rightskip}{0pt plus 5cm}int Pravila\-::get\-El (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const}}\label{class_pravila_ab7a8c1dbcb465ae7533e04f400907667}
+\begin{DoxyReturn}{Returns}
+Номер действия над элементом, на котором, при выполнении правила, будет стоять каретка. 
+\end{DoxyReturn}
+\hypertarget{class_pravila_a73b54739f3dfe3634186e4502e848cdd}{\index{Pravila@{Pravila}!get\-Go@{get\-Go}}
+\index{get\-Go@{get\-Go}!Pravila@{Pravila}}
+\subsubsection[{get\-Go}]{\setlength{\rightskip}{0pt plus 5cm}int Pravila\-::get\-Go (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const}}\label{class_pravila_a73b54739f3dfe3634186e4502e848cdd}
+\begin{DoxyReturn}{Returns}
+Номер следующего правила. 
+\end{DoxyReturn}
+\hypertarget{class_pravila_a4c51fe0e42588db81ec9322e46adb5a1}{\index{Pravila@{Pravila}!get\-Next@{get\-Next}}
+\index{get\-Next@{get\-Next}!Pravila@{Pravila}}
+\subsubsection[{get\-Next}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Pravila}$\ast$ Pravila\-::get\-Next (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_pravila_a4c51fe0e42588db81ec9322e46adb5a1}
+\begin{DoxyReturn}{Returns}
+Следующее по стеку правило. 
+\end{DoxyReturn}
+\hypertarget{class_pravila_aab81ced5121ae7c11df191f35b0f4f2e}{\index{Pravila@{Pravila}!get\-Num@{get\-Num}}
+\index{get\-Num@{get\-Num}!Pravila@{Pravila}}
+\subsubsection[{get\-Num}]{\setlength{\rightskip}{0pt plus 5cm}int Pravila\-::get\-Num (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_pravila_aab81ced5121ae7c11df191f35b0f4f2e}
+\begin{DoxyReturn}{Returns}
+Номер правила в стеке. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{mashina_8h}{mashina.\-h}\item 
+mashina.\-cpp\end{DoxyCompactItemize}

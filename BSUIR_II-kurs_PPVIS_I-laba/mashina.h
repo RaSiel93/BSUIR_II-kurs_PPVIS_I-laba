@@ -1,3 +1,11 @@
+/// @file mashina.h
+/// @author Поплавский Александр Евгеньевич
+/// @date октябрь 2012 года
+///
+
+#ifndef MASHINA_H
+#define MASHINA_H
+
 #include "conio.h"
 #include <windows.h>
 
@@ -18,81 +26,141 @@ using std::setw;
 
 using namespace std;
 
+/// @class Pravila
+///
+/// @brief Класс представляет набор правил к машине Тьюринга.
+///
+/// @author Поплавский Александр Евгеньевич
+/// @date октябрь 2012 года
+///
 class Pravila {
 public:
+	/// @brief Создаёт путое правило.
+	///
 	Pravila();
-//действие над элементом
+	/// @return Номер действия над элементом, на котором, при выполнении правила, будет стоять каретка.
+	///
 	int getEl() const;
+	/// @brief Задает номер действия над элементом, на котором, при выполнении правила, будет стоять каретка.
+	///
 	void setEl( int );
-//действие над кареткой	
+	/// @return Номер сдвига каретки, при выполнении правила.
+	///	
 	int getCar() const;
+	/// @brief Задает номер сдвига каретки, при выполнении правила.
+	///
 	void setCar( int );
-//переход к шагу
+	/// @return Номер следующего правила.
+	///	
 	int getGo() const;
+	/// @brief Задает номер следующего правила.
+	///
 	void setGo( int );
-//указатель на следующее правило
+	/// @return Следующее по стеку правило.
+	///	
 	Pravila* getNext() { return this->next; }
+	/// @brief Задает следующее по стеку правило.
+	///	
 	void setNext( Pravila *temp ) { this->next = temp; }
-//номер правила в алгоритме
+	/// @return Номер правила в стеке.
+	///	
 	int getNum() const { return number; }
+	/// @brief Задает номер правила в стеке.
+	///		
 	void setNum( int temp ) { number = temp; }
 private:
-//действия
 	int actEl;
 	int actCar;
 	int go;
-//позиция в стеке
+
 	int number;
 	Pravila *next;
 };
 
+/// @class Lenta
+///
+/// @brief Класс представляет ленту.
+///
+/// @author Поплавский Александр Евгеньевич
+/// @date октябрь 2012 года
+///
 class Lenta {
 public:
-//указатель на следующую единичную ячейку
+	/// @return Элемент ленты
+	///
 	Lenta* getNext() { return this->next; }
+	/// @brief Задать элемент ленты
+	///
 	void setNext( Lenta *temp ) { this->next = temp; }
-//номер единичной ячейки
+	/// @return Задать номер позиции еденицы в ленте
+	///
 	int getInfo() { return this->info; }
+	/// @brief Задает номер позиции еденицы в ленте
+	///
 	void setInfo( int temp ) { this->info = temp; }
-
 private:
 	int info;
 	Lenta *next;
 };
 
+/// @class MashinTuring
+///
+/// @brief Класс для представления машины Тьюринга.
+///
+/// @author Поплавский Александр Евгеньевич
+/// @date октябрь 2012 года
+///
 class MashinTuring {
-friend ostream &operator<<( ostream &, const MashinTuring & );
-friend istream &operator>>( istream &, MashinTuring & );
-
-friend MashinTuring &creat( const char*, bool );
-friend MashinTuring &load( const char*, bool );
-friend void save( MashinTuring&, const char*, bool );
-friend MashinTuring &edit( MashinTuring &, bool );
-friend MashinTuring &run( MashinTuring &, bool );
+	/// @brief Считывает из потока stream ленту в принятом виде.
+	///
+	friend ostream &operator<<( ostream &, const MashinTuring & );
+	/// @brief Выводит в поток stream ленту в принятом виде.
+	///
+	friend istream &operator>>( istream &, MashinTuring & );
+	// создает объект класса MashinTuring
+	friend MashinTuring &creat( const char*, bool );
+	// загружает объект класса MashinTuring
+	friend MashinTuring &load( const char*, bool );
+	// сохраняет объект класса MashinTuring
+	friend void save( MashinTuring&, const char*, bool );
+	// редактирует объект класса MashinTuring
+	friend MashinTuring &edit( MashinTuring &, bool );
+	// запускает алгоритм объекта класса MashinTuring
+	friend MashinTuring &run( MashinTuring &, bool );
 
 public:
 	bool operator==( const MashinTuring & ) const;
 	bool operator!=( const MashinTuring & ) const;
 	MashinTuring &operator=( const MashinTuring & );
+	// сдвигает каретку вправо
 	MashinTuring &operator++();
+	// сдвигает каретку влево
 	MashinTuring &operator--();
+	// проверяет наличие единицы на элементе ленты
 	bool operator[]( int ) const;
 
 	MashinTuring();
 	MashinTuring( const MashinTuring & );
 	~MashinTuring();
-//каретка	
+	// возвращает позицию каретки	
 	int getCaretka() const;
+	// задает позицию каретки
 	void setCaretka( int );
-//лента
+	// добавляет единицу на ленту
 	void AddElement( int );
+	// проверяет наличие единицы на элементе ленты
 	bool SearchElement( int ) const;
+	// обнуляет значение элемента ленты
 	void DelElement( int );
+	// обнуляет всю ленту
 	void ClearElements();
-//правила
+	// добавляет правило
 	void AddPravilo( int, int, int, int, int );
+	// возвращает правило по адресу
 	Pravila *SearchPravilo( int, int ) const;
+	// удаляет правило по адресу
 	void DelPravilo( int, int );
+	// удаляет все правила
 	void ClearPravila();
 //вспомогательные элементы для отображения правил
 	int getHelpScreenPravila() const { return helpScreenPravila; }
@@ -102,11 +170,13 @@ public:
 	int getHelpScreen() const { return helpScreen; }
 	void setHelpScreen( int temp ){ helpScreen = temp; }
 	void helpScreenEdit( MashinTuring & );
-//вывод ленты и правил
+	// вывод ленты на консоль
 	void printStatusAlgo();
+	// вывод правил на консоль
 	void printPravilo( int, int );
-//шаги алгаритма и проверка на остановку
+	// выполняет текущее правило алгоритма
 	int stepGo( int, int );
+	// проверяет условие остоновки алгоритма
 	int searchStop( int, bool );
 private:	
 //вспомогательная позиция для ленты и правил	
@@ -117,3 +187,5 @@ private:
 	Lenta *lentMassiv;
 	Pravila *pravilo[ 2 ];
 };
+
+#endif //MASHINA_H
